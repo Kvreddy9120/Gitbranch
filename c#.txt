@@ -1,0 +1,122 @@
+using System;
+
+namespace OopsProject
+{
+    internal class Game
+    {
+        public void StartGame()
+        {
+            Console.WriteLine("🎮 Game Start");
+
+            Console.Write("Enter 1: ");
+            int u1 = Convert.ToInt32(Console.ReadLine());
+
+            if (u1 == 1)
+            {
+                Console.WriteLine("User: " + u1);
+                Console.WriteLine("Computer: 2");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+                return;
+            }
+
+            Console.Write("Enter 3 or 4: ");
+            int u2 = Convert.ToInt32(Console.ReadLine());
+
+            if (u2 == 3 || u2 == 4)
+            {
+                Console.WriteLine("User: " + u2);
+                Console.WriteLine("Computer: 5");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+                return;
+            }
+
+            Console.Write("Enter 6 or 7: ");
+            int u3 = Convert.ToInt32(Console.ReadLine());
+
+            if (u3 == 6 || u3 == 7)
+            {
+                Console.WriteLine("User: " + u3);
+                Console.WriteLine("Computer: 8");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+                return;
+            }
+
+            Console.Write("Enter 9 or 10: ");
+            int u4 = Convert.ToInt32(Console.ReadLine());
+
+            if (u4 == 9 || u4 == 10)
+            {
+                Console.WriteLine("User: " + u4);
+                Console.WriteLine("Computer: 11");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+                return;
+            }
+
+            Console.Write("Enter 12 or 13: ");
+            int u5 = Convert.ToInt32(Console.ReadLine());
+
+            if (u5 == 12 || u5 == 13)
+            {
+                Console.WriteLine("User: " + u5);
+                Console.WriteLine("Computer: 14");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+                return;
+            }
+
+            Console.Write("Enter 15 or 16: ");
+            int u6 = Convert.ToInt32(Console.ReadLine());
+
+            if (u6 == 15 || u6 == 16)
+            {
+                Console.WriteLine("User: " + u6);
+                Console.WriteLine("Computer: 17");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+                return;
+            }
+
+            Console.Write("Enter 18 or 19: ");
+            int u7 = Convert.ToInt32(Console.ReadLine());
+
+            if (u7 == 18 || u7 == 19)
+            {
+                Console.WriteLine("User: " + u7);
+                Console.WriteLine("Computer: 20 🏆");
+                Console.WriteLine("🔥 COMPUTER WINS THE GAME!");
+            }
+            else
+            {
+                Console.WriteLine("Invalid move! Game Over.");
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Game game = new Game();
+            game.StartGame();
+
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey();
+        }
+    }
+}
