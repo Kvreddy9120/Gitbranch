@@ -1,0 +1,125 @@
+**IAM - AID: 128353492953 U_Name: kvreddy9120
+
+Jenkins** -----------------------
+
+yum install java-21-amazon-corretto -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/rpm-stable/jenkins.repo
+yum install jenkins -y
+systemctl start jenkins
+systemctl status jenkins
+
+
+Tomcat ------------------------
+
+yum install java-21-amazon-corretto -y
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.117/bin/apache-tomcat-9.0.117.tar.gz
+tar -zxvf apache-tomcat-9.0.117.tar.gz
+sed -i '56  a\<role rolename="manager-gui"/>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '57  a\<role rolename="manager-script"/>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '58  a\<user username="tomcat" password="admin@123" roles="manager-gui, manager-script"/>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '59  a\</tomcat-users>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '56d' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '21d' apache-tomcat-9.0.117/webapps/manager/META-INF/context.xml
+sed -i '22d'  apache-tomcat-9.0.117/webapps/manager/META-INF/context.xml
+sh apache-tomcat-9.0.117/bin/startup.sh
+
+
+NEXUS ------------------------
+
+yum install java-21-amazon-corretto -y
+cd /opt
+wget https://download.sonatype.com/nexus/3/nexus-3.92.2-01-linux-x86_64.tar.gz
+tar -zxvf nexus-3.92.2-01-linux-x86_64.tar.gz
+useradd nexus
+chown nexus:nexus nexus-3.92.2-01 sonatype-work/ -R
+su - nexus
+cd /opt
+cd nexus-3.92.2-01/bin/
+./nexus start
+
+maven (manually) ------------------------
+
+yum install java-21-amazon-corretto -y
+wget https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz
+tar -zxvf apache-maven-3.9.16-bin.tar.gz
+mv apache-maven-3.9.16 /opt/maven
+cd /opt/
+export M2_HOME=/opt/maven
+export PATH=$M2_HOME/bin:$PATH
+mvn -v
+
+Docker compose  ------------------------
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+sudo yum install -y python3-pip
+sudo pip3 install docker-compose
+docker-compose --version
+
+Install trivy ---------------------------
+
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+
+
+================================================
+
+
+Hashnode profile : https://hashnode.com/@mustafashaik         K8s notes : https://mustafa-k8s.hashnode.dev/
+Helm Notes: https://mustafa-k8s.hashnode.dev/mastering-helm-simplify-kubernetes-deployments-with-ease
+
+MiniKube: --------------
+
+yum install docker -y && systemctl start docker
+curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+minikube start --driver=docker --force
+minikube status
+
+KOPS:-------------
+
+curl -Lo kops https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x kops
+sudo mv kops /usr/local/bin/kops
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+mv kubectl /usr/local/bin/
+
+aws s3 ls
+
+export KOPS_STATE_STORE=s3://kvreddy9120
+
+kops create cluster --name mustafa.k8s.local --zones=us-east-2a,us-east-2b --master-size=c7i-flex.large --master-count=1 --master-volume-size=20 --node-size=t3.micro --node-count=2 --node-volume-size=20 --image=ami-0fe18bc3cfa53a248
+
+kops create cluster --name flm.k8s.local --zones=us-east-1a,us-east-1b --master-size=c7i-flex.large --master-count=1 --master-volume-size=20 --node-size=t3.micro --node-count=2 --node-volume-size=20 --image=ami-091138d0f0d41ff90
+
+kops create cluster --name flm.k8s.local --zones=us-east-1a,us-east-1b --master-size=m7i-flex.large --master-count=1 --master-volume-size=20 --node-size=c7i-flex.large --node-count=2 --node-volume-size=20 --image=ami-091138d0f0d41ff90
+
+kops update cluster --name flm.k8s.local --yes --admin
+
+kops get cluster
+
+kubectl get node
+
+HELM -
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+
+NOTE: don't forgot to delete the cluster after practice
+
+1. export KOPS_STATE_STORE=s3://kvreddy9120
+2. kops get cluster
+3. kops delete cluster --name flm.k8s.local --yes
+
+
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster flm.k8s.local
+ * edit your node instance group: kops edit ig --name=flm.k8s.local nodes-us-east-1a
+ * edit your control-plane instance group: kops edit ig --name=flm.k8s.local control-plane-us-east-1a
+
+Finally configure your cluster with: kops update cluster --name flm.k8s.local --yes --admin
