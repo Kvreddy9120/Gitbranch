@@ -1,0 +1,63 @@
+**IAM - AID: 128353492953 U_Name: kvreddy9120
+
+Jenkins** -----------------------
+
+yum install java-21-amazon-corretto -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/rpm-stable/jenkins.repo
+yum install jenkins -y
+systemctl start jenkins
+systemctl status jenkins
+
+
+Tomcat ------------------------
+
+yum install java-21-amazon-corretto -y
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.117/bin/apache-tomcat-9.0.117.tar.gz
+tar -zxvf apache-tomcat-9.0.117.tar.gz
+sed -i '56  a\<role rolename="manager-gui"/>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '57  a\<role rolename="manager-script"/>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '58  a\<user username="tomcat" password="admin@123" roles="manager-gui, manager-script"/>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '59  a\</tomcat-users>' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '56d' apache-tomcat-9.0.117/conf/tomcat-users.xml
+sed -i '21d' apache-tomcat-9.0.117/webapps/manager/META-INF/context.xml
+sed -i '22d'  apache-tomcat-9.0.117/webapps/manager/META-INF/context.xml
+sh apache-tomcat-9.0.117/bin/startup.sh
+
+
+NEXUS ------------------------
+
+yum install java-21-amazon-corretto -y
+cd /opt
+wget https://download.sonatype.com/nexus/3/nexus-3.92.2-01-linux-x86_64.tar.gz
+tar -zxvf nexus-3.92.2-01-linux-x86_64.tar.gz
+useradd nexus
+chown nexus:nexus nexus-3.92.2-01 sonatype-work/ -R
+su - nexus
+cd /opt
+cd nexus-3.92.2-01/bin/
+./nexus start
+
+maven (manually) ------------------------
+
+yum install java-21-amazon-corretto -y
+wget https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz
+tar -zxvf apache-maven-3.9.16-bin.tar.gz
+mv apache-maven-3.9.16 /opt/maven
+cd /opt/
+export M2_HOME=/opt/maven
+export PATH=$M2_HOME/bin:$PATH
+mvn -v
+
+Docker compose  ------------------------
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+sudo yum install -y python3-pip
+sudo pip3 install docker-compose
+docker-compose --version
+
+Install trivy ---------------------------
+
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
